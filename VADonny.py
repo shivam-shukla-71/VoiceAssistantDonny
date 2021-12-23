@@ -41,7 +41,8 @@ def takeCommand():
         print(f"User said: {query}\n")
     except Exception as e:
         print("Say that again please.....")
-        return "None"
+        speak("Say that again please.....")
+        takeCommand()
     return query
 
 
@@ -68,9 +69,14 @@ if __name__=="__main__":
         elif 'open google' in query:
             webbrowser.open("google.com")
         elif 'brave' in query:
-                brave_dir='C:\ProgramData\Microsoft\Windows\Start Menu\Programs'
-                b_file=os.listdir(brave_dir)
-
+                brave_dir="C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+                os.startfile(brave_dir)
+        elif 'the time' in query:
+            strTime=datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir, the time is {strTime}")
+        elif 'open code' in query:
+            codePath="C:\\Users\\shiva\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
         elif 'play' in query:
             music_dir='D:\Music\Eng'
             songs=os.listdir(music_dir)
@@ -78,9 +84,14 @@ if __name__=="__main__":
             os.startfile(os.path.join(music_dir,songs[0]))
         elif 'who are you' in query:
             speak("I am Donny, I am a voice assistant programmed by Shivam, I can hear you, but i can't hear the noise")
-        elif 'goodbye' or 'exit' or 'quit' in query:
+        elif 'goodbye' in query:
             print("GoodBye sir")
             speak("GoodBye sir.")
             break
+        else:
+            print("Say that again please.....")
+            speak("Say that again please.....")
+            takeCommand()
+
 
         
