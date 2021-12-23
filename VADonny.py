@@ -4,7 +4,9 @@ import wikipedia
 import webbrowser
 import datetime
 import os
-from gnewsclient import gnewsclient 
+from gnewsclient import gnewsclient
+from wikipedia import exceptions 
+import smtplib
 
 engine = pyttsx3.init('sapi5')
 voice = engine.getProperty('voices')
@@ -45,6 +47,23 @@ def takeCommand():
         takeCommand()
     return query
 
+def sendMail(to,cont_mail):
+    server=smtplib.SMTP('smtp.gmail.com',587)
+    server.ehlo()
+    server.starttls()
+    server.login('users email address','users password')
+    server.sendmail('users email address',to,cont_mail)
+    server.close()
+
+def mail_add_str(raw): #to convert the reciever's email address from raw microphone input to a meaningful email address
+    str1=raw.replace(" ","")
+    if 'attherate' in str1:
+        str2= str1.replace("attherate","@")
+    elif 'at' in str1:
+        str2= str1.replace("at","@")
+    return str2
+
+
 
 if __name__=="__main__":
     wishMe()
@@ -64,6 +83,24 @@ if __name__=="__main__":
             news_list=client.get_news()
             tt=news_list[0]
             speak(tt)
+        elif 'send email' in query:
+            try:
+                print("Speak the content sir.")
+                speak("Speak the content sir.")
+                cont_mail=takeCommand()
+                print("to who should i send this sir?")
+                speak("to who should i send this sir?")
+                raw=takeCommand()
+                to=mail_add_str(raw)
+                sendMail(to,cont_mail)
+                speak("sir, the email has been sent.")
+            except Exception as e:
+                print(e)
+                speak("Sir, I apologies the mail has not been sent.")
+        elif 'Charlie' in query:
+            print("Sir?")
+            speak("Sir?")
+
         elif 'open youtube' in query:
             webbrowser.open("youtube.com")
         elif 'open google' in query:
